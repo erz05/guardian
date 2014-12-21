@@ -82,6 +82,7 @@ public class MainActivity extends FragmentActivity
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class MainActivity extends FragmentActivity
                         .position(new LatLng(lat, lng)).title("It's Me!")
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(new LatLng(lat, lng))
-                        //.zoom(15.5f)
+                        .zoom(0)
                         //.bearing(0)
                         //.tilt(25)
                         .build()));
