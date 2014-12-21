@@ -79,6 +79,9 @@ public class MainActivity extends FragmentActivity
 //                .add(new LatLng(51.5, -0.1), new LatLng(40.7, -74.0))
 //                .width(5)
 //                .color(Color.RED));
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
     }
 
     @Override
