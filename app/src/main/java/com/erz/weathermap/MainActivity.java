@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.erz.weathermap.data.Countries;
+import com.erz.weathermap.data.Country;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -17,13 +19,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
+import java.util.Vector;
 
 public class MainActivity extends FragmentActivity
-        implements GoogleMap.OnMyLocationChangeListener, OnBackgroundTaskListener<String> {
+        implements GoogleMap.OnMyLocationChangeListener, OnBackgroundTaskListener<Countries> {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     static final CameraPosition SYDNEY =
@@ -51,6 +56,8 @@ public class MainActivity extends FragmentActivity
 
         //FetchStringTask task = new FetchStringTask(this, "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyBGxJk3vM6McDk1NyCK_oMiKTNC6I3QBWM");
         //task.run();
+        FetchCountriesTask task = new FetchCountriesTask(this, this);
+        task.run();
     }
 
     @Override
@@ -155,9 +162,29 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
-    public void onComplete(String result) {
-        if(result != null){
-            Log.v("DELETE_THIS", result);
+    public void onComplete(Countries result) {
+        Log.v("DELETE_THIS", "result is null? "+(result == null));
+        if(result != null && result.size() > 0){
+            Country tmp = null;
+            for(Country country: result){
+                if(country.id.equals("Egypt")){
+                    tmp = country;
+                    break;
+                }
+            }
+
+            if(tmp != null && tmp.coordinates != null){
+                Polygon polygon = mMap.addPolygon(new PolygonOptions()
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.BLUE));
+
+                Vector<LatLng> points = new Vector<LatLng>();
+                for (double[] d: tmp.coordinates){
+                    points.add(new LatLng(d[0],d[1]));
+                }
+
+                polygon.setPoints(points);
+            }
         }
     }
 
